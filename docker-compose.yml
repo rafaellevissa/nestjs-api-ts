@@ -1,4 +1,4 @@
-version: '3.3'
+version: '3.4'
 services:
   db:
     image: mysql
@@ -13,14 +13,17 @@ services:
       - database
 
   api:
-    build: .
+    build:
+      context: .
+      target: development
     volumes:
-      - ./:/app
+      - .:/app
+    command: npm run start:dev
+    env_file:
+      - .env
     environment:
-      - PATH=./
       - NODE_ENV=development
     ports:
       - 3000:3000
-
-volumes:
-  database:
+    depends_on:
+      - db
