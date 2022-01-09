@@ -1,34 +1,53 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  HttpException,
+  HttpStatus,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import {
+  Crud,
+  CrudController,
+  CrudRequest,
+  Override,
+  ParsedBody,
+  ParsedRequest,
+} from '@nestjsx/crud';
+import { User } from './entities/user.entity';
+import { AllowAny } from 'src/custom-decorators/allow-any.decorator';
+import * as bcrypt from 'bcrypt';
 
+@Crud({
+  dto: {
+    create: CreateUserDto,
+    update: UpdateUserDto,
+  },
+  model: {
+    type: User,
+  },
+})
 @Controller('user')
-export class UserController {
-  constructor(private readonly userService: UserService) {}
+export class UserController implements CrudController<User> {
+  constructor(public service: UserService) {}
 
-  @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
-  }
-
-  @Get()
-  findAll() {
-    return this.userService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.userService.remove(+id);
+  @Override()
+  @AllowAny()
+  async createOne(
+    @ParsedRequest() req: CrudRequest,
+    @ParsedBody() user: CreateUserDto,
+  ): Promise<User | any> {
+    if (user.password) {
+      let hashed = await bcrypt.hash(user.password, 10);
+      user.password = hashed;
+      return this.service.createOne(req, user);
+    } else {
+      throw new HttpException(
+        'Senha e corfimação de senha não combinam!',
+        HttpStatus.CONFLICT,
+      );
+    }
   }
 }

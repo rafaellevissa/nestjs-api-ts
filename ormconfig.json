@@ -1,0 +1,18 @@
+{
+  "name": "default",
+  "type": "mysql",
+  "host": "localhost",
+  "port": 3306,
+  "username": "cleiton",
+  "password": "futuro123",
+  "database": "challenge",
+  "synchronize": true,
+  "logging": false,
+  "entities": ["dist/src/**/*.entity.js"],
+  "migrations": ["dist/migration/**/*.js"],
+  "subscribers": ["dist/subscriber/**/*.js"],
+  "cli": {
+    "migrationsDir": "./migration",
+    "subscribersDir": "./subscriber"
+  }
+}
