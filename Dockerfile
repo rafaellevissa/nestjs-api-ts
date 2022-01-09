@@ -1,11 +1,15 @@
 FROM node:17
 
-COPY package*.json /app
+WORKDIR /app
 
-RUN npm install
+COPY package*.json ./
 
-COPY . /app
+COPY . .
 
-ENTRYPOINT [ "npm start:dev" ]
+RUN npm install --only=development
+
+RUN npm i -g @nestjs/cli
+
+ENTRYPOINT [ "npm run start" ]
 
 EXPOSE 3000

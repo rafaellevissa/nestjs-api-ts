@@ -16,6 +16,9 @@ services:
     build: .
     volumes:
       - ./:/app
+    environment:
+      - PATH=./
+      - NODE_ENV=development
     ports:
       - 3000:3000
 
