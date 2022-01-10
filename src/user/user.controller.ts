@@ -1,9 +1,12 @@
 import {
+  CacheInterceptor,
   Controller,
+  Get,
   HttpException,
   HttpStatus,
   Post,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -18,7 +21,9 @@ import {
 } from '@nestjsx/crud';
 import { User } from './entities/user.entity';
 import { AllowAny } from 'src/custom-decorators/allow-any.decorator';
+import { AddressService } from 'src/services/address.service';
 import * as bcrypt from 'bcrypt';
+import { ZipCodeInterceptor } from 'src/interceptors/zipCode.interceptor';
 
 @Crud({
   dto: {
@@ -36,12 +41,14 @@ import * as bcrypt from 'bcrypt';
     },
   },
 })
+// @UseInterceptors(CacheInterceptor)
 @Controller('user')
 export class UserController implements CrudController<User> {
   constructor(public service: UserService) {}
 
   @Override()
   @AllowAny()
+  @UseInterceptors(ZipCodeInterceptor)
   async createOne(
     @ParsedRequest() req: CrudRequest,
     @ParsedBody() user: CreateUserDto,
