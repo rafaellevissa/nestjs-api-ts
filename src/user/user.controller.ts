@@ -28,6 +28,13 @@ import * as bcrypt from 'bcrypt';
   model: {
     type: User,
   },
+  query: {
+    join: {
+      address: {
+        eager: true,
+      },
+    },
+  },
 })
 @Controller('user')
 export class UserController implements CrudController<User> {

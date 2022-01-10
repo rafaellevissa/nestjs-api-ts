@@ -24,6 +24,10 @@ export class Address {
   @Column()
   state: string;
 
-  @JoinColumn({ name: 'user_id' })
+  @OneToOne(() => User, (user) => user.address)
+  @JoinColumn({
+    name: 'user_id',
+    referencedColumnName: 'id',
+  })
   user: User;
 }
