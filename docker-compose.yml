@@ -2,23 +2,25 @@ version: '3.4'
 services:
   db:
     image: mysql
+    container_name: db
     command: --default-authentication-plugin=mysql_native_password
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: 'admin'
-      MYSQL_DATABASE: 'challenge'
-      MYSQL_USER: 'user'
-      MYSQL_PASSWORD: 'password'
-    volumes:
-      - database
+      MYSQL_ROOT_PASSWORD: "${DB_PASSWORD}"
+      MYSQL_DATABASE: "${DB_NAME}"
+      MYSQL_USER: "${DB_USERNAME}"
+      MYSQL_PASSWORD: "${DB_PASSWORD}"
+    env_file:
+      - .env
 
   api:
+    container_name: api
     build:
       context: .
       target: development
     volumes:
       - .:/app
-    command: npm run start:dev
+    command: npm run start:dev && npm run migration:run
     env_file:
       - .env
     environment:
