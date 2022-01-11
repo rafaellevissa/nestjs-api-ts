@@ -5,13 +5,9 @@ services:
     container_name: db
     command: --default-authentication-plugin=mysql_native_password
     restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: "${DB_PASSWORD}"
-      MYSQL_DATABASE: "${DB_NAME}"
-      MYSQL_USER: "${DB_USERNAME}"
-      MYSQL_PASSWORD: "${DB_PASSWORD}"
-    env_file:
-      - .env
+    ports:
+      - 3307:3306
+    env_file: .env
 
   api:
     container_name: api
