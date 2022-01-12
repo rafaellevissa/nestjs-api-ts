@@ -5,6 +5,8 @@
 You can just install using either docker-compose or runing straight up on your machine.
 First of all, you need to set up the .env file at the root folder of the project.
 
+you can find the swagger documentation at `/api`
+
 ### Docker
 
 ```

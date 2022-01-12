@@ -1,7 +1,9 @@
 import {
   Controller,
+  Get,
   HttpException,
   HttpStatus,
+  Param,
   UseInterceptors,
 } from '@nestjs/common';
 import { UserService } from './user.service';
@@ -19,7 +21,13 @@ import * as bcrypt from 'bcrypt';
 import { User } from './entities/user.entity';
 import { AllowAny } from '../custom-decorators/allow-any.decorator';
 import { ZipCodeInterceptor } from '../interceptors/zipCode.interceptor';
-import { ApiBody, ApiOkResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBody,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { ListUserDto } from './dto/list-user.dto';
 
 @Crud({
@@ -64,5 +72,19 @@ export class UserController implements CrudController<User> {
         HttpStatus.CONFLICT,
       );
     }
+  }
+
+  @Get('/cpf/:cpf')
+  @ApiBody({ type: CreateUserDto })
+  @ApiOkResponse({ type: ListUserDto })
+  @ApiNotFoundResponse()
+  @ApiResponse({ status: 401, description: 'Not authorized.' })
+  async findByCpf(@Param() params): Promise<User | any> {
+    const { cpf } = params;
+
+    return this.service.findOne({
+      where: { cpf },
+      relations: ['address'],
+    });
   }
 }
