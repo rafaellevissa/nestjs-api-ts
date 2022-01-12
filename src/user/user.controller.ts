@@ -19,6 +19,8 @@ import * as bcrypt from 'bcrypt';
 import { User } from './entities/user.entity';
 import { AllowAny } from '../custom-decorators/allow-any.decorator';
 import { ZipCodeInterceptor } from '../interceptors/zipCode.interceptor';
+import { ApiBody, ApiOkResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ListUserDto } from './dto/list-user.dto';
 
 @Crud({
   dto: {
@@ -37,6 +39,7 @@ import { ZipCodeInterceptor } from '../interceptors/zipCode.interceptor';
   },
 })
 // @UseInterceptors(CacheInterceptor)
+@ApiTags('user')
 @Controller('user')
 export class UserController implements CrudController<User> {
   constructor(public service: UserService) {}
@@ -44,6 +47,9 @@ export class UserController implements CrudController<User> {
   @Override()
   @AllowAny()
   @UseInterceptors(ZipCodeInterceptor)
+  @ApiBody({ type: CreateUserDto })
+  @ApiOkResponse({ type: ListUserDto })
+  @ApiResponse({ status: 401, description: 'Not authorized.' })
   async createOne(
     @ParsedRequest() req: CrudRequest,
     @ParsedBody() user: CreateUserDto,

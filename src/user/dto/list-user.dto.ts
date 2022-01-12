@@ -1,7 +1,8 @@
 import { ApiProperty } from '@nestjsx/crud/lib/crud';
-import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsObject, IsString } from 'class-validator';
+import { ListAddressDto } from './list-address.dto';
 
-export class CreateUserDto {
+export class ListUserDto {
   @ApiProperty({ type: 'string' })
   @IsNotEmpty()
   @IsString()
@@ -27,8 +28,7 @@ export class CreateUserDto {
   @IsNotEmpty()
   phone: string;
 
-  @ApiProperty({ type: 'string' })
-  @IsString()
-  @IsNotEmpty()
-  zip_code: string;
+  @ApiProperty({ type: ListAddressDto })
+  @IsObject()
+  address: ListAddressDto;
 }
