@@ -1,11 +1,7 @@
 import {
-  CacheInterceptor,
   Controller,
-  Get,
   HttpException,
   HttpStatus,
-  Post,
-  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { UserService } from './user.service';
@@ -19,11 +15,10 @@ import {
   ParsedBody,
   ParsedRequest,
 } from '@nestjsx/crud';
-import { User } from './entities/user.entity';
-import { AllowAny } from 'src/custom-decorators/allow-any.decorator';
-import { AddressService } from 'src/services/address.service';
 import * as bcrypt from 'bcrypt';
-import { ZipCodeInterceptor } from 'src/interceptors/zipCode.interceptor';
+import { User } from './entities/user.entity';
+import { AllowAny } from '../custom-decorators/allow-any.decorator';
+import { ZipCodeInterceptor } from '../interceptors/zipCode.interceptor';
 
 @Crud({
   dto: {

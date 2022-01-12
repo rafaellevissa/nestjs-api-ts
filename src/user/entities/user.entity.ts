@@ -29,6 +29,8 @@ export class User {
 
   @OneToOne(() => Address, (address) => address.user, {
     cascade: true,
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
   })
   address: Address;
 }

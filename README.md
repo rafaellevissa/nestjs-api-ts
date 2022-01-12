@@ -36,5 +36,5 @@ Now you're ready to go 🥳🎉!
 ## 👨‍🔬 Test
 
 ```
-composer run-script test
+yarn test
 ```

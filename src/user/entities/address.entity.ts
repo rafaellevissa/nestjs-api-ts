@@ -24,7 +24,7 @@ export class Address {
   @Column()
   state: string;
 
-  @OneToOne(() => User, (user) => user.address)
+  @OneToOne(() => User, (user) => user.address, { onDelete: 'CASCADE' })
   @JoinColumn({
     name: 'user_id',
     referencedColumnName: 'id',

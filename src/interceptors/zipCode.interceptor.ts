@@ -6,8 +6,7 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { Observable, throwError } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { AddressService } from 'src/services/address.service';
+import { AddressService } from '../services/address.service';
 
 @Injectable()
 export class ZipCodeInterceptor implements NestInterceptor {
